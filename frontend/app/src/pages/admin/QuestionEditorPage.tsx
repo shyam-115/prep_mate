@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import AdminShell from '@components/layout/AdminShell'
 import Button from '@components/ui/Button'
 import Icon from '@components/ui/Icon'
@@ -30,7 +30,6 @@ const diffBadgeMap: Record<Difficulty, 'secondary' | 'neutral' | 'error'> = {
 
 export default function QuestionEditorPage() {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
   const isEdit = Boolean(id)
   const [form, setForm] = useState(initialState)
   const [newConcept, setNewConcept] = useState('')
