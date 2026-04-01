@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AdminShell from '@components/layout/AdminShell'
 import Button from '@components/ui/Button'
 import Icon from '@components/ui/Icon'
@@ -16,13 +17,20 @@ const initialState = {
 const iconOptions = ['category', 'account_tree', 'terminal', 'hub', 'database', 'psychology', 'coffee', 'bolt']
 
 export default function TopicEditorPage() {
+  const navigate = useNavigate()
   const [form, setForm] = useState(initialState)
 
   return (
     <AdminShell>
       <div className="flex items-center justify-between mb-10">
         <div>
-          <p className="text-xs text-on-surface-variant uppercase tracking-widest font-semibold mb-2">Creating New Topic</p>
+          <button
+            onClick={() => navigate('/admin/topics')}
+            className="flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-2 hover:text-on-surface transition-colors"
+          >
+            <Icon name="arrow_back" size="xs" />
+            Back to Topics
+          </button>
           <h2 className="text-4xl font-extrabold tracking-tight font-headline">Topic Editor</h2>
         </div>
         <div className="flex gap-4">

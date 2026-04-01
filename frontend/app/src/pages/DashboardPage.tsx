@@ -188,7 +188,7 @@ export default function DashboardPage() {
 
         {/* Recommendation banner */}
         <section className="md:col-span-12">
-          <Card hover variant="dark" className="group !p-12 overflow-hidden border border-accent-500/30 shadow-lg dark:shadow-[0_0_50px_rgba(168,85,247,0.2)]">
+          <Card hover variant="elevated" className="group !p-12 overflow-hidden border border-accent-500/30 shadow-lg dark:shadow-[0_0_50px_rgba(168,85,247,0.2)]">
             {/* Gradient overlay */}
 
             <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">

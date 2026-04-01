@@ -73,14 +73,18 @@ export default function App() {
             <Route path="/library"           element={<LibraryPage />} />
             <Route path="/library/:courseId" element={<CurriculumPage />} />
 
+            {/* ── Public AppLayout Routes (No Auth Required) ───────────── */}
+            <Route element={<AppLayout requireAuth={false} />}>
+              <Route path="/app/learn/topics/:slug"     element={<TopicPagePython />} />
+              <Route path="/app/learn/concepts"         element={<LearningConceptsPage />} />
+              <Route path="/app/learn/concepts/:slug"   element={<ConceptDetailPage />} />
+            </Route>
+
             {/* ── Learner /app/** (auth-gated via AppLayout) ───────────── */}
-            <Route path="/app" element={<AppLayout />}>
+            <Route path="/app" element={<AppLayout requireAuth={true} />}>
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard"              element={<DashboardPage />} />
               <Route path="onboarding"             element={<OnboardingPage />} />
-              <Route path="learn/topics/:slug"     element={<TopicPagePython />} />
-              <Route path="learn/concepts"         element={<LearningConceptsPage />} />
-              <Route path="learn/concepts/:slug"   element={<ConceptDetailPage />} />
               <Route path="practice"               element={<InterviewQuestionsPage />} />
               <Route path="practice/deep-dive"     element={<DeepDiveQuestionPage />} />
               <Route path="community"              element={<CommunityPage />} />

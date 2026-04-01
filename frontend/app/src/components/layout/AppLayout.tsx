@@ -49,13 +49,13 @@ const FOOTER_ITEMS: SidebarFooterItem[] = [
  * Renders once; individual pages render via <Outlet />.
  * Auth guard is centralised here — no per-route <ProtectedRoute> needed.
  */
-export default function AppLayout() {
+export default function AppLayout({ requireAuth = true }: { requireAuth?: boolean }) {
   const { user } = useAuth()
   const location = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   // ── Auth guard ─────────────────────────────────────────────────────────
-  if (!user) {
+  if (requireAuth && !user) {
     return (
       <Navigate
         to="/login"
@@ -76,7 +76,7 @@ export default function AppLayout() {
       <div className="flex w-full min-h-[calc(100vh-65px)]">
         <Sidebar
           items={NAV_ITEMS}
-          footerItems={FOOTER_ITEMS}
+          footerItems={user ? FOOTER_ITEMS : [FOOTER_ITEMS[0]]}
           isOpen={isMobileMenuOpen}
           onClose={() => setIsMobileMenuOpen(false)}
           workspaceTitle="PrepMate"
