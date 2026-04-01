@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@contexts/AuthContext'
 import Navbar from '@components/layout/Navbar'
 import Card from '@components/ui/Card'
 import Badge from '@components/ui/Badge'
@@ -7,6 +8,7 @@ import ProgressBar from '@components/ui/ProgressBar'
 
 export default function LibraryPage() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const courses = [
     {
       id: 'dsa',
@@ -63,13 +65,15 @@ export default function LibraryPage() {
       <main className="flex-1 w-full max-w-[1200px] mx-auto px-6 py-12 lg:py-16">
 
         {/* Back to Dashboard */}
-        <button
-          onClick={() => navigate('/app/dashboard')}
-          className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-primary transition-colors mb-10"
-        >
-          <Icon name="arrow_back" size="sm" />
-          Back to Dashboard
-        </button>
+        {user && (
+          <button
+            onClick={() => navigate('/app/dashboard')}
+            className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-primary transition-colors mb-10"
+          >
+            <Icon name="arrow_back" size="sm" />
+            Back to Dashboard
+          </button>
+        )}
 
         <header className="mb-16 relative z-10 animate-slide-up flex flex-col items-center text-center">
 

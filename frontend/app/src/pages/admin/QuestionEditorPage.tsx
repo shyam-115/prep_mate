@@ -29,9 +29,9 @@ const diffBadgeMap: Record<Difficulty, 'secondary' | 'neutral' | 'error'> = {
 }
 
 export default function QuestionEditorPage() {
-  const { id }   = useParams<{ id: string }>()
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const isEdit   = Boolean(id)
+  const isEdit = Boolean(id)
   const [form, setForm] = useState(initialState)
   const [newConcept, setNewConcept] = useState('')
 
@@ -51,13 +51,6 @@ export default function QuestionEditorPage() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
         <div>
-          <button
-            onClick={() => navigate('/admin/questions')}
-            className="flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-2 hover:text-on-surface transition-colors"
-          >
-            <Icon name="arrow_back" size="xs" />
-            Questions
-          </button>
           <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight font-headline">
             {isEdit ? `Editing Question #${id}` : 'New Question'}
           </h2>
@@ -108,22 +101,30 @@ export default function QuestionEditorPage() {
             <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">
               Example Input / Output
             </label>
-            <div className="bg-inverse-surface rounded-2xl overflow-hidden">
-              <div className="px-6 py-3 flex items-center justify-between border-b border-white/5">
+            <div className="bg-surface-container-highest dark:bg-[#0f1524] rounded-2xl overflow-hidden border border-outline-variant/50 dark:border-white/10 shadow-lg">
+              <div className="px-5 py-3 flex items-center justify-between border-b border-outline-variant/50 dark:border-white/5 bg-slate-100 dark:bg-transparent">
                 <div className="flex gap-2">
-                  {['#e06c75', '#98c379', '#61afef'].map((c) => (
-                    <div key={c} className="w-3 h-3 rounded-full" style={{ background: c }} aria-hidden="true" />
+                  {['#ff5f56', '#ffbd2e', '#27c93f'].map((c) => (
+                    <div key={c} className="w-3 h-3 rounded-full shadow-inner" style={{ background: c }} aria-hidden="true" />
                   ))}
                 </div>
-                <span className="text-xs font-mono text-white/40 uppercase tracking-widest">example.txt</span>
+                <span className="text-xs font-mono text-on-surface-variant/80 dark:text-white/40 uppercase tracking-widest">example.txt</span>
               </div>
-              <textarea
-                value={form.example}
-                onChange={(e) => setForm((f) => ({ ...f, example: e.target.value }))}
-                rows={4}
-                placeholder={'Input: nums = [2,7,11,15], target = 9\nOutput: [0,1]'}
-                className="w-full bg-transparent text-secondary-fixed-dim p-6 font-mono text-sm focus:outline-none resize-none"
-              />
+              <div className="flex bg-white dark:bg-[#050914] relative">
+                <div className="py-4 pl-4 pr-3 text-right bg-slate-50 dark:bg-white/[0.02] border-r border-outline-variant/30 dark:border-white/5 select-none font-mono text-sm text-outline dark:text-white/20 hidden sm:block">
+                  {Array.from({ length: Math.max(4, form.example.split('\n').length) }).map((_, i) => (
+                    <div key={i} className="leading-relaxed">{i + 1}</div>
+                  ))}
+                </div>
+                <textarea
+                  value={form.example}
+                  onChange={(e) => setForm((f) => ({ ...f, example: e.target.value }))}
+                  rows={Math.max(4, form.example.split('\n').length)}
+                  placeholder={'Input: nums = [2,7,11,15], target = 9\nOutput: [0,1]'}
+                  className="w-full bg-transparent text-secondary dark:text-accent-100 p-4 font-mono text-sm leading-relaxed focus:outline-none resize-none focus:bg-primary-50/30 dark:focus:bg-white/[0.02] transition-colors"
+                  spellCheck={false}
+                />
+              </div>
             </div>
           </div>
 
@@ -132,22 +133,30 @@ export default function QuestionEditorPage() {
             <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">
               Editorial Solution (Python)
             </label>
-            <div className="bg-inverse-surface rounded-2xl overflow-hidden">
-              <div className="px-6 py-3 flex items-center justify-between border-b border-white/5">
+            <div className="bg-surface-container-highest dark:bg-[#0f1524] rounded-2xl overflow-hidden border border-outline-variant/50 dark:border-white/10 shadow-lg">
+              <div className="px-5 py-3 flex items-center justify-between border-b border-outline-variant/50 dark:border-white/5 bg-slate-100 dark:bg-transparent">
                 <div className="flex gap-2">
-                  {['#e06c75', '#98c379', '#61afef'].map((c) => (
-                    <div key={c} className="w-3 h-3 rounded-full" style={{ background: c }} aria-hidden="true" />
+                  {['#ff5f56', '#ffbd2e', '#27c93f'].map((c) => (
+                    <div key={c} className="w-3 h-3 rounded-full shadow-inner" style={{ background: c }} aria-hidden="true" />
                   ))}
                 </div>
-                <span className="text-xs font-mono text-white/40 uppercase tracking-widest">solution.py</span>
+                <span className="text-xs font-mono text-on-surface-variant/80 dark:text-white/40 uppercase tracking-widest">solution.py</span>
               </div>
-              <textarea
-                value={form.solution}
-                onChange={(e) => setForm((f) => ({ ...f, solution: e.target.value }))}
-                rows={8}
-                placeholder={'def twoSum(nums, target):\n    prevMap = {}\n    for i, n in enumerate(nums):\n        diff = target - n\n        if diff in prevMap:\n            return [prevMap[diff], i]\n        prevMap[n] = i'}
-                className="w-full bg-transparent text-secondary-fixed-dim p-6 font-mono text-sm focus:outline-none resize-none"
-              />
+              <div className="flex bg-white dark:bg-[#050914] relative">
+                <div className="py-4 pl-4 pr-3 text-right bg-slate-50 dark:bg-white/[0.02] border-r border-outline-variant/30 dark:border-white/5 select-none font-mono text-sm text-outline dark:text-white/20 hidden sm:block">
+                  {Array.from({ length: Math.max(8, form.solution.split('\n').length) }).map((_, i) => (
+                    <div key={i} className="leading-relaxed">{i + 1}</div>
+                  ))}
+                </div>
+                <textarea
+                  value={form.solution}
+                  onChange={(e) => setForm((f) => ({ ...f, solution: e.target.value }))}
+                  rows={Math.max(8, form.solution.split('\n').length)}
+                  placeholder={'def twoSum(nums, target):\n    prevMap = {}\n    for i, n in enumerate(nums):\n        diff = target - n\n        if diff in prevMap:\n            return [prevMap[diff], i]\n        prevMap[n] = i'}
+                  className="w-full bg-transparent text-secondary dark:text-accent-100 p-4 font-mono text-sm leading-relaxed focus:outline-none resize-none focus:bg-primary-50/30 dark:focus:bg-white/[0.02] transition-colors"
+                  spellCheck={false}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -178,9 +187,8 @@ export default function QuestionEditorPage() {
                   <button
                     key={d}
                     onClick={() => setForm((f) => ({ ...f, difficulty: d }))}
-                    className={`flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
-                      form.difficulty === d ? 'ring-2 ring-primary scale-105' : 'opacity-60 hover:opacity-80'
-                    }`}
+                    className={`flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${form.difficulty === d ? 'ring-2 ring-primary scale-105' : 'opacity-60 hover:opacity-80'
+                      }`}
                   >
                     <Badge label={d} variant={diffBadgeMap[d]} uppercase className="w-full justify-center" />
                   </button>

@@ -58,43 +58,43 @@ export default function LearningConceptsPage() {
       Deep Dive Track
     </div>
 
-    <span className="text-white/30 hidden sm:inline">•</span>
+    <span className="text-outline-variant/60 dark:text-white/30 hidden sm:inline">•</span>
 
-    <span className="text-sm text-white/60 font-medium">
+    <span className="text-sm text-on-surface-variant dark:text-white/60 font-medium">
       Data Structures
     </span>
   </div>
 
   {/* Title */}
   <h1 className="text-5xl sm:text-6xl md:text-7xl font-black 
-    text-transparent bg-clip-text bg-gradient-to-r 
-    from-white via-white to-white/70 
+    text-on-surface dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r 
+    dark:from-white dark:via-white dark:to-white/70 
     leading-[1.05] tracking-tight max-w-4xl font-headline mb-6">
     
     Core Concepts Mastery
   </h1>
 
   {/* Subtext */}
-  <p className="text-lg md:text-xl text-white/70 max-w-2xl leading-relaxed font-body mb-10">
+  <p className="text-lg md:text-xl text-on-surface-variant dark:text-white/70 max-w-2xl leading-relaxed font-body mb-10">
     Build a strong mental model of data structures — optimized for interviews, system design, and real-world problem solving.
   </p>
 
   {/* Progress Block (UPGRADED) */}
-  <div className="w-full max-w-3xl bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-xl">
+  <div className="w-full max-w-3xl bg-white dark:bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-outline-variant/60 dark:border-white/10 shadow-xl">
 
     {/* Top row */}
     <div className="flex justify-between items-center mb-4">
-      <span className="text-xs font-bold uppercase tracking-widest text-white/60">
+      <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant/80 dark:text-white/60">
         Learning Progress
       </span>
 
-      <span className="text-sm text-white/50">
+      <span className="text-sm text-on-surface-variant dark:text-white/50">
         {completedCount} / {concepts.length} completed
       </span>
     </div>
 
     {/* Progress bar */}
-    <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden mb-4">
+    <div className="h-3 w-full bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden mb-4">
       <div
         className="h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full 
         shadow-[0_0_12px_rgba(59,130,246,0.6)] transition-all duration-700"
@@ -104,7 +104,7 @@ export default function LearningConceptsPage() {
 
     {/* Bottom row */}
     <div className="flex justify-between items-center">
-      <span className="text-sm text-white/50">
+      <span className="text-sm text-on-surface-variant/70 dark:text-white/50">
         Stay consistent — mastery compounds
       </span>
 
