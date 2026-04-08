@@ -22,6 +22,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string) => Promise<{ message: string }>
   logout: () => Promise<void>
   updateProfile: (updates: Partial<Pick<AuthUser, 'name' | 'avatarUrl'>>) => void
+  deleteAccount: (password: string) => Promise<void>
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -109,8 +110,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser((prev) => prev ? { ...prev, ...updates } : null)
   }, [])
 
+  const deleteAccount = useCallback(async (password: string) => {
+    setIsLoading(true)
+    try {
+      await authApi.deleteAccount(password)
+      // Only clear local session if API succeeds
+      setAccessToken(null)
+      setUser(null)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout, updateProfile }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout, updateProfile, deleteAccount }}>
       {children}
     </AuthContext.Provider>
   )

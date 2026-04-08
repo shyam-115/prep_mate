@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@contexts/AuthContext'
 import Icon from '@components/ui/Icon'
+import { isApiError } from '@lib/api'
 
 type DemoRole = 'learner' | 'admin'
 
@@ -20,10 +21,11 @@ export default function LoginPage() {
   const stateFrom = (location.state as { from?: Location })?.from?.pathname
   const redirect = stateFrom ?? searchParams.get('redirect') ?? '/app/dashboard'
 
-  const [email, setEmail]       = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError]       = useState<string | null>(null)
-  const [showPw, setShowPw]     = useState(false)
+  const [email, setEmail]         = useState('')
+  const [password, setPassword]   = useState('')
+  const [error, setError]         = useState<string | null>(null)
+  const [showPw, setShowPw]       = useState(false)
+  const [isUnverified, setIsUnverified] = useState(false)
 
   // Already logged in — send to dashboard
   useEffect(() => {
@@ -33,11 +35,18 @@ export default function LoginPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError(null)
+    setIsUnverified(false)
     try {
       await login(email, password)
       navigate(redirect, { replace: true })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed.')
+      // 403 with email-verify message → show OTP redirect CTA
+      if (isApiError(err) && err.status === 403 && err.message.toLowerCase().includes('verify')) {
+        setIsUnverified(true)
+        setError('Your email address is not verified yet.')
+      } else {
+        setError(err instanceof Error ? err.message : 'Login failed.')
+      }
     }
   }
 
@@ -180,12 +189,25 @@ export default function LoginPage() {
             {error && (
               <div
                 role="alert"
-                className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium
+                className="flex flex-col gap-2 p-3 rounded-xl text-sm font-medium
                   bg-red-50 border border-red-200 text-red-700
                   dark:bg-error/10 dark:border-error/30 dark:text-red-400"
               >
-                <Icon name="error" size="sm" />
-                {error}
+                <span className="flex items-center gap-2">
+                  <Icon name="error" size="sm" />
+                  {error}
+                </span>
+                {isUnverified && (
+                  <Link
+                    to={`/verify-email?email=${encodeURIComponent(email)}`}
+                    id="login-verify-email-cta"
+                    className="inline-flex items-center gap-1.5 font-bold text-primary-600 dark:text-primary-400
+                      hover:text-primary-500 dark:hover:text-primary-300 transition-colors"
+                  >
+                    <Icon name="mark_email_read" size="sm" />
+                    Verify your email →
+                  </Link>
+                )}
               </div>
             )}
 

@@ -13,7 +13,12 @@ export interface IUser extends Document {
   avatarUrl?: string;
   status: UserStatus;
   emailVerified: boolean;
-  verifyToken?: string;
+  /** Bcrypt hash of the 6-digit OTP — never store raw */
+  otpCode?: string;
+  /** Hard expiry timestamp (3 min after issue) */
+  otpExpires?: Date;
+  /** Failed OTP attempt counter — lock account after 5 */
+  otpAttempts?: number;
   resetToken?: string;
   resetTokenExp?: Date;
   createdAt: Date;
@@ -30,19 +35,23 @@ const userSchema = new Schema<IUser>(
     avatarUrl: { type: String },
     status: { type: String, enum: ['ACTIVE', 'BLOCKED', 'PENDING'], default: 'ACTIVE' },
     emailVerified: { type: Boolean, default: false },
-    verifyToken: { type: String, select: false },
-    resetToken: { type: String, select: false },
-    resetTokenExp: { type: Date, select: false },
+    otpCode:     { type: String, select: false },
+    otpExpires:  { type: Date,   select: false },
+    otpAttempts: { type: Number, select: false, default: 0 },
+    resetToken:    { type: String, select: false },
+    resetTokenExp: { type: Date,   select: false },
   },
   { timestamps: true }
 );
 
-// Never expose passwordHash / tokens in JSON
+// Never expose sensitive fields in JSON responses
 userSchema.set('toJSON', {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transform(_doc: unknown, ret: Record<string, any>) {
     delete ret['passwordHash'];
-    delete ret['verifyToken'];
+    delete ret['otpCode'];
+    delete ret['otpExpires'];
+    delete ret['otpAttempts'];
     delete ret['resetToken'];
     delete ret['resetTokenExp'];
     return ret;

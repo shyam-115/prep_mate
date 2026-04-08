@@ -147,9 +147,24 @@ export const authApi = {
 
   me: () => request<ApiUser>('/auth/me'),
 
-  verifyEmail: (token: string) =>
-    request<{ message: string }>(`/auth/verify-email?token=${encodeURIComponent(token)}`, {
+  deleteAccount: (password: string) =>
+    request<{ message: string }>('/auth/me', {
+      method: 'DELETE',
+      body: JSON.stringify({ password }),
+    }),
+
+  verifyOtp: (email: string, otp: string) =>
+    request<{ message: string }>('/auth/verify-otp', {
+      method: 'POST',
       skipAuth: true,
+      body: JSON.stringify({ email, otp }),
+    }),
+
+  resendOtp: (email: string) =>
+    request<{ message: string }>('/auth/resend-otp', {
+      method: 'POST',
+      skipAuth: true,
+      body: JSON.stringify({ email }),
     }),
 
   forgotPassword: (email: string) =>

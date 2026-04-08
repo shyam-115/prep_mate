@@ -56,14 +56,18 @@ export async function logout(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function verifyEmail(req: Request, res: Response, next: NextFunction) {
+export async function verifyOtp(req: Request, res: Response, next: NextFunction) {
   try {
-    const token = req.query['token'] as string;
-    if (!token) {
-      res.status(400).json({ error: 'Token is required' });
-      return;
-    }
-    const result = await authService.verifyEmail(token);
+    const result = await authService.verifyOtp(req.body);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function resendOtp(req: Request, res: Response, next: NextFunction) {
+  try {
+    const result = await authService.resendOtp(req.body);
     res.json(result);
   } catch (err) {
     next(err);
@@ -92,6 +96,17 @@ export async function getMe(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await authService.getMe(req.user!.id);
     res.json(user);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function deleteAccount(req: Request, res: Response, next: NextFunction) {
+  try {
+    const result = await authService.deleteAccount(req.user!.id, req.body);
+    // Immediately clear the refresh cookie so this browser session is dead
+    res.clearCookie(COOKIE_NAME, { path: '/' });
+    res.json(result);
   } catch (err) {
     next(err);
   }

@@ -7,13 +7,12 @@ export default function RegisterPage() {
   const { register, user, isLoading } = useAuth()
   const navigate = useNavigate()
 
-  const [name, setName]             = useState('')
-  const [email, setEmail]           = useState('')
-  const [password, setPassword]     = useState('')
-  const [confirm, setConfirm]       = useState('')
-  const [error, setError]           = useState<string | null>(null)
-  const [showPw, setShowPw]         = useState(false)
-  const [registered, setRegistered] = useState(false)
+  const [name, setName]         = useState('')
+  const [email, setEmail]       = useState('')
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm]   = useState('')
+  const [error, setError]       = useState<string | null>(null)
+  const [showPw, setShowPw]     = useState(false)
 
   useEffect(() => {
     if (user) navigate('/app/dashboard', { replace: true })
@@ -34,35 +33,14 @@ export default function RegisterPage() {
 
     try {
       await register(name.trim(), email.trim(), password)
-      setRegistered(true) // show "check your email" state
+      // Redirect to OTP verification page with the email pre-filled
+      navigate(`/verify-email?email=${encodeURIComponent(email.trim())}`, { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed.')
     }
   }
 
   const valid = name.trim().length > 0 && email.includes('@') && password.length >= 8 && password === confirm
-
-  if (registered) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="w-full max-w-md animate-fade-in text-center">
-          <div className="rounded-3xl p-10 border shadow-xl bg-white border-slate-200 dark:bg-[#1E1E1E] dark:border-white/[0.08]">
-            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-accent-500/10 flex items-center justify-center">
-              <Icon name="mark_email_read" className="text-accent-500 !text-3xl" />
-            </div>
-            <h1 className="text-2xl font-black font-headline text-on-surface dark:text-white mb-3">Check your inbox</h1>
-            <p className="text-on-surface-variant dark:text-white/60 text-sm leading-relaxed mb-8">
-              We sent a verification link to <strong className="text-on-surface dark:text-white">{email}</strong>.
-              Click the link to activate your account.
-            </p>
-            <a href="/login" className="inline-block w-full py-3.5 rounded-xl font-bold text-sm text-white bg-primary-600 hover:bg-primary-500 transition-all text-center">
-              Go to Sign In
-            </a>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
