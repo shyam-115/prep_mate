@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Card from '@components/ui/Card'
 import Icon from '@components/ui/Icon'
 import { useTheme } from '@contexts/ThemeContext'
@@ -40,6 +41,7 @@ function Toggle({ checked, onChange, label }: { checked: boolean; onChange: () =
 }
 
 export default function SettingsPage() {
+  const navigate = useNavigate()
   const { theme, setTheme } = useTheme()
   const [activeTab, setActiveTab] = useState<TabId>('appearance')
   const [notifs, setNotifs] = useState({
@@ -142,6 +144,20 @@ export default function SettingsPage() {
               </p>
 
               <div className="space-y-4">
+                <button
+                  onClick={() => navigate('/app/settings/change-password')}
+                  className="w-full flex items-center gap-3 p-4 rounded-xl border text-left transition-all
+                    border-slate-200 text-on-surface hover:bg-slate-50
+                    dark:border-white/[0.08] dark:text-white/80 dark:hover:bg-white/5"
+                >
+                  <Icon name="password" size="sm" className="text-primary-600 dark:text-primary-400" />
+                  <div>
+                    <div className="text-sm font-semibold">Change Password</div>
+                    <div className="text-xs text-on-surface-variant dark:text-white/40">Update your account password securely</div>
+                  </div>
+                  <Icon name="chevron_right" size="sm" className="ml-auto text-on-surface-variant" />
+                </button>
+
                 <button
                   className="w-full flex items-center gap-3 p-4 rounded-xl border text-left transition-all
                     border-slate-200 text-on-surface hover:bg-slate-50
