@@ -52,7 +52,6 @@ export default function LibraryPage() {
       id: 'graph',
       title: 'Graph Theory',
       description: 'Advanced traversal techniques and shortest path optimizations.',
-      locked: true,
       unlockLevel: 5,
       icon: 'lock',
     }
@@ -65,7 +64,7 @@ export default function LibraryPage() {
       <main className="flex-1 w-full max-w-[1200px] mx-auto px-6 py-12 lg:py-16">
 
         {/* Back to Dashboard */}
-        {user && (
+        {/* {user && (
           <button
             onClick={() => navigate('/app/dashboard')}
             className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-primary transition-colors mb-10"
@@ -73,7 +72,7 @@ export default function LibraryPage() {
             <Icon name="arrow_back" size="sm" />
             Back to Dashboard
           </button>
-        )}
+        )} */}
 
         <header className="mb-16 relative z-10 animate-slide-up flex flex-col items-center text-center">
 
@@ -107,58 +106,65 @@ export default function LibraryPage() {
 
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => (
             <Card
               key={course.id}
-              variant={course.locked ? 'surface-low' : 'default'}
-              hover={!course.locked}
-              className={`flex flex-col h-full ${course.locked ? 'opacity-70 grayscale border-dashed border-2' : 'cursor-pointer'}`}
-              onClick={() => !course.locked && navigate(`/library/${course.id}`)}
+              variant="default"
+              hover={true}
+              className="flex flex-col h-full cursor-pointer"
+              onClick={() => navigate(`/library/${course.id}`)}
             >
               <div className="mb-6 flex items-start justify-between">
                 <div className="h-12 w-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
                   <Icon name={course.icon} size="md" />
                 </div>
+
                 {course.tag && (
                   <Badge label={course.tag} variant="primary" uppercase className="!text-[10px]" />
                 )}
+
                 {course.progress !== undefined && course.progress > 0 && course.progress < 100 && (
-                  <span className="text-sm font-bold text-primary">{course.progress}% Complete</span>
+                  <span className="text-sm font-bold text-primary">
+                    {course.progress}% Complete
+                  </span>
                 )}
               </div>
 
               <div className="flex-1">
-                <h3 className={`text-2xl font-bold font-headline mb-3 ${course.locked ? 'text-on-surface-variant' : 'text-on-surface'}`}>
+                <h3 className="text-2xl font-bold font-headline mb-3 text-on-surface">
                   {course.title}
                 </h3>
+
                 <p className="text-on-surface-variant text-sm leading-relaxed mb-8">
                   {course.description}
                 </p>
               </div>
 
-              {!course.locked ? (
-                <div className="mt-auto">
-                  <div className="flex justify-between text-xs font-bold text-on-surface-variant mb-2 uppercase tracking-wider">
-                    <span>Progress</span>
-                    <span>{course.completedTopics}/{course.totalTopics} Topics</span>
-                  </div>
-                  <ProgressBar value={course.progress ?? 0} showLabel={false} size="sm" className="mb-6" />
+              {/* ALWAYS SHOW PROGRESS */}
+              <div className="mt-auto">
+                <div className="flex justify-between text-xs font-bold text-on-surface-variant mb-2 uppercase tracking-wider">
+                  <span>Progress</span>
+                  <span>{course.completedTopics}/{course.totalTopics} Topics</span>
+                </div>
 
-                  <button
-                    onClick={() => navigate(`/library/${course.id}`)}
-                    className="flex items-center text-primary font-bold hover:text-primary-dim transition-colors pb-2"
-                  >
-                    View Topics <Icon name="arrow_forward" size="sm" className="ml-1" />
-                  </button>
-                </div>
-              ) : (
-                <div className="mt-auto pt-4 border-t border-outline-variant/10">
-                  <div className="inline-block px-3 py-1 bg-surface-container-high text-xs font-bold text-on-surface-variant uppercase tracking-widest rounded-md">
-                    Unlocks at lvl {course.unlockLevel}
-                  </div>
-                </div>
-              )}
+                <ProgressBar
+                  value={course.progress ?? 0}
+                  showLabel={false}
+                  size="sm"
+                  className="mb-6"
+                />
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation(); // prevent double navigation
+                    navigate(`/library/${course.id}`);
+                  }}
+                  className="flex items-center text-primary font-bold hover:text-primary-dim transition-colors pb-2"
+                >
+                  View Topics <Icon name="arrow_forward" size="sm" className="ml-1" />
+                </button>
+              </div>
             </Card>
           ))}
         </div>

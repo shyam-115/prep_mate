@@ -27,6 +27,7 @@ import {
   VerifyOtpInput,
   ResendOtpInput,
   DeleteAccountInput,
+  ChangePasswordInput,
 } from './auth.schema';
 import { logger } from '../../utils/logger';
 
@@ -254,6 +255,23 @@ export async function resetPassword(input: ResetPasswordInput) {
   await RefreshToken.deleteMany({ userId: user._id });
 
   return { message: 'Password reset successfully. Please log in.' };
+}
+
+// ── Change Password ───────────────────────────────────────────────────────────
+export async function changePassword(userId: string, input: ChangePasswordInput) {
+  const user = await User.findById(userId).select('+passwordHash');
+  if (!user) throw createError('User not found', 404);
+
+  const passwordOk = await bcrypt.compare(input.currentPassword, user.passwordHash);
+  if (!passwordOk) throw createError('Incorrect current password', 401);
+
+  user.passwordHash = await bcrypt.hash(input.newPassword, 12);
+  await user.save();
+
+  // Clear all refresh tokens so they have to log in again on other devices.
+  await RefreshToken.deleteMany({ userId: user._id });
+  
+  return { message: 'Password updated successfully. Please log in again.' };
 }
 
 // ── Get Me ────────────────────────────────────────────────────────────────────

@@ -180,6 +180,12 @@ export const authApi = {
       skipAuth: true,
       body: JSON.stringify({ token, password }),
     }),
+
+  changePassword: (currentPassword: string, newPassword: string) =>
+    request<{ message: string }>('/auth/change-password', {
+      method: 'PATCH',
+      body: JSON.stringify({ currentPassword, newPassword }),
+    }),
 }
 
 // ── Topics ────────────────────────────────────────────────────────────────────

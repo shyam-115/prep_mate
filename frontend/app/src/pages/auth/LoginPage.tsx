@@ -19,7 +19,7 @@ export default function LoginPage() {
   const [searchParams] = useSearchParams()
   // Prefer location.state.from (set by AppLayout guard), fall back to ?redirect= query param
   const stateFrom = (location.state as { from?: Location })?.from?.pathname
-  const redirect = stateFrom ?? searchParams.get('redirect') ?? '/app/dashboard'
+  const redirect = stateFrom ?? searchParams.get('redirect') ?? '/'
 
   const [email, setEmail]         = useState('')
   const [password, setPassword]   = useState('')
@@ -29,8 +29,8 @@ export default function LoginPage() {
 
   // Already logged in — send to dashboard
   useEffect(() => {
-    if (user) navigate(redirect, { replace: true })
-  }, [user, navigate, redirect])
+    if (user) navigate('/', { replace: true })
+  }, [user, navigate])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()

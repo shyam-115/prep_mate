@@ -28,6 +28,7 @@ const LearningConceptsPage   = lazy(() => import('@pages/LearningConceptsPage'))
 const ConceptDetailPage      = lazy(() => import('@pages/ConceptDetailPage'))
 const ProfilePage            = lazy(() => import('@pages/ProfilePage'))
 const SettingsPage           = lazy(() => import('@pages/SettingsPage'))
+const ChangePasswordPage     = lazy(() => import('@pages/ChangePasswordPage'))
 const CommunityPage          = lazy(() => import('@pages/CommunityPage'))
 
 // Admin pages
@@ -90,7 +91,10 @@ export default function App() {
               <Route path="practice/deep-dive"     element={<DeepDiveQuestionPage />} />
               <Route path="community"              element={<CommunityPage />} />
               <Route path="profile"                element={<ProfilePage />} />
-              <Route path="settings"               element={<SettingsPage />} />
+              <Route path="settings">
+                <Route index element={<SettingsPage />} />
+                <Route path="change-password" element={<ChangePasswordPage />} />
+              </Route>
             </Route>
 
             {/* ── Backward-compat redirects (old flat URLs → /app/**) ── */}

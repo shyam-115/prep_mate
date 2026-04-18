@@ -15,7 +15,7 @@ export default function RegisterPage() {
   const [showPw, setShowPw]     = useState(false)
 
   useEffect(() => {
-    if (user) navigate('/app/dashboard', { replace: true })
+    if (user) navigate('/', { replace: true })
   }, [user, navigate])
 
   const handleSubmit = async (e: React.FormEvent) => {
