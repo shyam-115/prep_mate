@@ -8,7 +8,10 @@ const envSchema = z.object({
   JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 characters'),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
-  RESEND_API_KEY: z.string().min(1, 'RESEND_API_KEY is required for sending emails'),
+  SMTP_HOST: z.string().min(1, 'SMTP_HOST is required'),
+  SMTP_PORT: z.string().default('587').transform(Number),
+  SMTP_USER: z.string().min(1, 'SMTP_USER is required'),
+  SMTP_PASS: z.string().min(1, 'SMTP_PASS is required'),
   EMAIL_FROM: z.string().default('PrepMate <noreply@prepmate.io>'),
   FRONTEND_URL: z.string().url().default('http://localhost:5173'),
 });

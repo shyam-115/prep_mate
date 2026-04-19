@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import type { NavItem, SidebarFooterItem } from '@types-app/index'
 import Icon from '@components/ui/Icon'
 import { useAuth } from '@contexts/AuthContext'
@@ -37,6 +37,7 @@ export default function Sidebar({
   onClose,
 }: SidebarProps) {
   const { logout } = useAuth()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -161,7 +162,11 @@ export default function Sidebar({
               item.danger ? (
                 <button
                   key={item.label}
-                  onClick={() => { logout(); onClose?.() }}
+                  onClick={() => {
+                    logout()
+                    navigate('/')
+                    onClose?.()
+                  }}
                   className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm border border-transparent transition-all duration-200 w-full text-left
                     text-error hover:bg-error/8 dark:hover:bg-error/15 dark:text-red-400 dark:hover:text-red-300"
                 >

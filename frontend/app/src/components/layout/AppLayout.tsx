@@ -54,6 +54,8 @@ export default function AppLayout({ requireAuth = true }: { requireAuth?: boolea
   const location = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  const isFullNavbarPage = location.pathname.startsWith('/app/community') || location.pathname.startsWith('/app/practice') || location.pathname.startsWith('/app/practice/deep-dive')
+
   // ── Auth guard ─────────────────────────────────────────────────────────
   if (requireAuth && !user) {
     return (
@@ -65,28 +67,40 @@ export default function AppLayout({ requireAuth = true }: { requireAuth?: boolea
     )
   }
 
+  // Define top nav items to show when sidebar is hidden
+  const topNavItems = isFullNavbarPage ? [
+    { label: 'Dashboard', href: '/app/dashboard' },
+    { label: 'Library',   href: '/library' },
+    { label: 'Practice',  href: '/app/practice' },
+    { label: 'Community', href: '/app/community' },
+  ] : []
+
   return (
     <div className="min-h-screen bg-background relative">
       <Navbar
-        navLinks={[]}
+        navLinks={topNavItems}
         showSearch
         onMenuClick={() => setIsMobileMenuOpen((prev) => !prev)}
       />
 
       <div className="flex w-full min-h-[calc(100vh-65px)]">
-        <Sidebar
-          items={NAV_ITEMS}
-          footerItems={user ? FOOTER_ITEMS : [FOOTER_ITEMS[0]]}
-          isOpen={isMobileMenuOpen}
-          onClose={() => setIsMobileMenuOpen(false)}
-          workspaceTitle="PrepMate"
-          workspaceSubtitle="Interview Prep"
-          showUpgradeCTA
-        />
+        {!isFullNavbarPage && (
+          <Sidebar
+            items={NAV_ITEMS}
+            footerItems={user ? FOOTER_ITEMS : [FOOTER_ITEMS[0]]}
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+            workspaceTitle="PrepMate"
+            workspaceSubtitle="Interview Prep"
+            showUpgradeCTA
+          />
+        )}
 
         {/* Page content */}
-        <main className="flex-1 min-w-0 p-6 lg:p-10 overflow-x-hidden pb-24 lg:pb-10">
-          <Outlet />
+        <main className={`flex-1 min-w-0 pb-24 lg:pb-10 overflow-x-hidden ${isFullNavbarPage ? 'p-0' : 'p-6 lg:p-10'}`}>
+          <div className={isFullNavbarPage ? 'max-w-7xl mx-auto p-6 lg:p-10' : ''}>
+            <Outlet />
+          </div>
         </main>
       </div>
 

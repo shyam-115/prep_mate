@@ -101,6 +101,17 @@ export async function getMe(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function changePassword(req: Request, res: Response, next: NextFunction) {
+  try {
+    const result = await authService.changePassword(req.user!.id, req.body);
+    // Immediately clear the refresh cookie so this browser session is dead and re-login happens
+    res.clearCookie(COOKIE_NAME, { path: '/' });
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function deleteAccount(req: Request, res: Response, next: NextFunction) {
   try {
     const result = await authService.deleteAccount(req.user!.id, req.body);

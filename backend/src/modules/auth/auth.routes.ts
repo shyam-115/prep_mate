@@ -9,6 +9,7 @@ import {
   verifyOtpSchema,
   resendOtpSchema,
   deleteAccountSchema,
+  changePasswordSchema,
 } from './auth.schema';
 import * as ctrl from './auth.controller';
 
@@ -190,6 +191,15 @@ router.post('/reset-password', authLimiter, validate(resetPasswordSchema), ctrl.
  *     tags: [Auth]
  */
 router.get('/me', authenticate, ctrl.getMe);
+
+/**
+ * @swagger
+ * /auth/change-password:
+ *   patch:
+ *     summary: Change the current user's password
+ *     tags: [Auth]
+ */
+router.patch('/change-password', authenticate, authLimiter, validate(changePasswordSchema), ctrl.changePassword);
 
 /**
  * @swagger

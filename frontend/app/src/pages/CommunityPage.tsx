@@ -1,6 +1,7 @@
 import Card from '@components/ui/Card'
 import Badge from '@components/ui/Badge'
 import Icon from '@components/ui/Icon'
+import PostInput from '@components/ui/PostInput '
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 
@@ -64,8 +65,11 @@ export default function CommunityPage() {
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
         {/* Feed */}
         <div className="lg:col-span-2 flex flex-col gap-5">
+        {/* New post placeholder */}
+          <PostInput />
           {POSTS.map((post) => (
             <Card key={post.id} hover>
               <div className="flex items-start gap-4">
@@ -100,19 +104,7 @@ export default function CommunityPage() {
             </Card>
           ))}
 
-          {/* New post placeholder */}
-          <Card variant="surface-low">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-primary-500/10 dark:bg-primary-500/20 flex items-center justify-center flex-shrink-0">
-                <Icon name="edit" size="sm" className="text-primary-600 dark:text-primary-400" />
-              </div>
-              <div className="flex-1 px-4 py-3 rounded-xl text-sm text-on-surface-variant dark:text-white/40 border cursor-pointer
-                bg-slate-50 border-slate-200 hover:border-primary-300 hover:text-on-surface hover:bg-white transition-all
-                dark:bg-white/5 dark:border-white/[0.08] dark:hover:border-primary-400/40 dark:hover:bg-white/10">
-                Share something with the community…
-              </div>
-            </div>
-          </Card>
+          
         </div>
 
         {/* Sidebar: Leaderboard */}

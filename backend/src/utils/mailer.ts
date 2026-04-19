@@ -1,8 +1,20 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import { env } from '../config/env';
 import { logger } from './logger';
 
-const resend = new Resend(env.RESEND_API_KEY);
+/**
+ * Configure Nodemailer transporter based on SMTP settings.
+ * Supports Gmail, Custom SMTP, etc.
+ */
+const transporter = nodemailer.createTransport({
+  host: env.SMTP_HOST,
+  port: env.SMTP_PORT,
+  secure: env.SMTP_PORT === 465, // true for 465, false for other ports
+  auth: {
+    user: env.SMTP_USER,
+    pass: env.SMTP_PASS,
+  },
+});
 
 interface MailOptions {
   to: string;
@@ -10,22 +22,21 @@ interface MailOptions {
   html: string;
 }
 
+/**
+ * Sends an email using the configured SMTP transporter.
+ */
 export async function sendMail({ to, subject, html }: MailOptions): Promise<void> {
   try {
-    const { data, error } = await resend.emails.send({
+    const info = await transporter.sendMail({
       from: env.EMAIL_FROM,
       to,
       subject,
       html,
     });
 
-    if (error) {
-      throw new Error(`Resend Error: ${error.message}`);
-    }
-
-    logger.info({ to, subject, id: data?.id }, 'Email sent');
+    logger.info({ to, subject, messageId: info.messageId }, 'Email sent via SMTP');
   } catch (err) {
-    logger.error({ err, to, subject }, 'Failed to send email');
+    logger.error({ err, to, subject }, 'Failed to send email via SMTP');
     throw err;
   }
 }

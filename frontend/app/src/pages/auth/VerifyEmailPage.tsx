@@ -162,13 +162,13 @@ export default function VerifyEmailPage() {
 
   const emailFromQuery = decodeURIComponent(searchParams.get('email') ?? '')
 
-  const [digits, setDigits]                 = useState<string[]>(Array(OTP_LENGTH).fill(''))
-  const [pageState, setPageState]           = useState<PageState>('idle')
-  const [error, setError]                   = useState<string | null>(null)
+  const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''))
+  const [pageState, setPageState] = useState<PageState>('idle')
+  const [error, setError] = useState<string | null>(null)
   const [resendCooldown, setResendCooldown] = useState(0)
-  const [resendStatus, setResendStatus]     = useState<'idle' | 'sending' | 'sent'>('idle')
+  const [resendStatus, setResendStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
   // Bumping this restarts the 3-min countdown (happens after each successful resend)
-  const [countdownKey, setCountdownKey]     = useState(0)
+  const [countdownKey, setCountdownKey] = useState(0)
 
   const otp = digits.join('')
   const otpComplete = otp.length === OTP_LENGTH
@@ -352,13 +352,12 @@ export default function VerifyEmailPage() {
           size="sm"
           className={isExpired ? 'text-red-500' : expiry.remaining < 60 ? 'text-amber-500' : 'text-on-surface-variant dark:text-white/40'}
         />
-        <span className={`text-sm font-semibold tabular-nums ${
-          isExpired
+        <span className={`text-sm font-semibold tabular-nums ${isExpired
             ? 'text-red-500'
             : expiry.remaining < 60
               ? 'text-amber-500 dark:text-amber-400'
               : 'text-on-surface-variant dark:text-white/50'
-        }`}>
+          }`}>
           {isExpired ? 'Code expired' : `Expires in ${expiry.formatted}`}
         </span>
       </div>
