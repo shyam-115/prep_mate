@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '@contexts/AuthContext'
 import Navbar from '@components/layout/Navbar'
 import Card from '@components/ui/Card'
 import Badge from '@components/ui/Badge'
@@ -8,7 +7,6 @@ import ProgressBar from '@components/ui/ProgressBar'
 
 export default function LibraryPage() {
   const navigate = useNavigate()
-  const { user } = useAuth()
   const courses = [
     {
       id: 'dsa',
